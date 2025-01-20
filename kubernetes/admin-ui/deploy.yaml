@@ -21,7 +21,7 @@ spec:
           configMap:
             name: admin-ui-cm
       containers:
-      - image: {{ECR_REGISTRY}}/admin-api:{{IMAGE_TAG}}
+      - image: {{ECR_REGISTRY}}/admin-ui:{{IMAGE_TAG}}
         name: admin-ui
         securityContext:
           runAsNonRoot: true
