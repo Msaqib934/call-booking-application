@@ -100,6 +100,7 @@ jobs:
           sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
 
           # Apply the Kubernetes manifest to EKS
+          kubectl create namespace user || true
           kubectl apply -f deploy.yaml
           kubectl apply -f configmap.yaml
           kubectl apply -f service.yaml
