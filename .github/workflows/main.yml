@@ -37,7 +37,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Admin-UI push to ECR
         id: admin-ui
         env:
           ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
@@ -47,3 +47,37 @@ jobs:
           cd admin-ui
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Admin-Api push to ECR
+        id: admin-api
+        env:
+          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPOSITORY: admin-api
+          IMAGE_TAG: ${{ github.run_number }}
+        run: |
+          cd admin-api
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+       - name: User-ui push to ECR
+         id: user-ui
+         env:
+           ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+           ECR_REPOSITORY: user-ui
+           IMAGE_TAG: ${{ github.run_number }}
+         run: |
+           cd user-ui
+           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TA
+          
+
+       - name: User-Api push to ECR
+         id: user-api
+         env:
+           ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+           ECR_REPOSITORY: user-api
+           IMAGE_TAG: ${{ github.run_number }}
+         run: |
+           cd user-api
+           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
