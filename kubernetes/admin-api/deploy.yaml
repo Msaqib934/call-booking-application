@@ -19,7 +19,7 @@ spec:
       nodeSelector:
         mdoule: admin
       containers:
-      - image: 585768154650.dkr.ecr.ap-south-1.amazonaws.com/admin-api:1.0
+      - image: {{ECR_REGISTRY}}/admin-api:{{IMAGE_TAG}}
         name: admin-api
         securityContext:
           runAsNonRoot: true
