@@ -21,7 +21,7 @@ spec:
           configMap:
             name: admin-ui-cm
       containers:
-      - image: 585768154650.dkr.ecr.ap-south-1.amazonaws.com/admin-ui:1.0
+      - image: {{ECR_REGISTRY}}/admin-api:{{IMAGE_TAG}}
         name: admin-ui
         securityContext:
           runAsNonRoot: true
