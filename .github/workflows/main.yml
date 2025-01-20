@@ -42,11 +42,15 @@ jobs:
           docker build -t $ECR_REGISTRY/${{ matrix.app }}:${{ github.run_number }} .
           docker push $ECR_REGISTRY/${{ matrix.app }}:${{ github.run_number }}
 
-      - name: Set up kubectl
-        uses: aws-actions/eks-kubectl-action@v1
-        with:
-          cluster-name: check
-          region: us-east-1
+      - name: Install kubectl
+        run: |
+          curl -LO https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.9/2021-11-17/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin
+
+      - name: Set up kubeconfig
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name check
 
       - name: Deploy to EKS
         env:
