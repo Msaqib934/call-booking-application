@@ -41,3 +41,18 @@ jobs:
           cd ${{ matrix.app }}
           docker build -t $ECR_REGISTRY/${{ matrix.app }}:${{ github.run_number }} .
           docker push $ECR_REGISTRY/${{ matrix.app }}:${{ github.run_number }}
+
+      - name: Deploy to EKS
+        env:
+          IMAGE_TAG: ${{ github.run_number }}
+          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+        run: |
+          # Access the specific folder for the admin-api deployment
+          cd kubernetes/admin-api
+
+          # Replace image tag and ECR registry in the deploy.yaml
+          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
+          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
+
+          # Apply the Kubernetes manifest to EKS
+          kubectl apply -f deploy.yaml
