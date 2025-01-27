@@ -10,6 +10,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+      IMAGE_TAG: ${{ github.run_number }}
 
     strategy:
       matrix:
@@ -34,9 +37,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build and Push to ECR
-        env:
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
-          IMAGE_TAG: ${{ github.run_number }}
         run: |
           cd ${{ matrix.app }}
           docker build -t $ECR_REGISTRY/${{ matrix.app }}:${{ github.run_number }} .
@@ -53,9 +53,6 @@ jobs:
           aws eks --region us-east-1 update-kubeconfig --name check
 
       - name: Deploy to admin-api
-        env:
-          IMAGE_TAG: ${{ github.run_number }}
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
         run: |
           # Access the specific folder for the admin-api deployment
           cd kubernetes/admin-api
@@ -71,9 +68,6 @@ jobs:
           kubectl apply -f service.yaml
 
       - name: Deploy admin-ui
-        env:
-          IMAGE_TAG: ${{ github.run_number }}
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
         run: |
           # Access the specific folder for the admin-api deployment
           cd kubernetes/admin-ui
@@ -86,9 +80,6 @@ jobs:
           kubectl apply -f dynamic.yaml
           
       - name: Deploy user-api
-        env:
-          IMAGE_TAG: ${{ github.run_number }}
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
         run: |
           # Access the specific folder for the admin-api deployment
           cd kubernetes/user-api
@@ -103,9 +94,6 @@ jobs:
           kubectl apply -f service.yaml
           
       - name: Deploy user-ui
-        env:
-          IMAGE_TAG: ${{ github.run_number }}
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
         run: |
           # Access the specific folder for the admin-api deployment
           cd kubernetes/user-ui
