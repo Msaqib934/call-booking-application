@@ -52,56 +52,16 @@ jobs:
         run: |
           aws eks --region us-east-1 update-kubeconfig --name check
 
-      - name: Deploy to admin-api
+      - name: Deploy to admin-ui, admin-api, user-ui, user-api
         run: |
           # Access the specific folder for the admin-api deployment
-          cd kubernetes/admin-api
+          cd kubernetes/${{ matrix.app }}
 
           # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
+          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" dynamic.yaml
+          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" dynamic.yaml
 
           # Apply the Kubernetes manifest to EKS
           kubectl create namespace admin || true
-          kubectl apply -f deploy.yaml
-          kubectl apply -f secret.yaml
-          kubectl apply -f service.yaml
-
-      - name: Deploy admin-ui
-        run: |
-          # Access the specific folder for the admin-api deployment
-          cd kubernetes/admin-ui
-
-          # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
-
-          # Apply the Kubernetes manifest to EKS
-          kubectl apply -f dynamic.yaml
-          
-      - name: Deploy user-api
-        run: |
-          # Access the specific folder for the admin-api deployment
-          cd kubernetes/user-api
-
-          # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
-
-          # Apply the Kubernetes manifest to EKS
-          kubectl apply -f deploy.yaml
-          kubectl apply -f secret.yaml
-          kubectl apply -f service.yaml
-          
-      - name: Deploy user-ui
-        run: |
-          # Access the specific folder for the admin-api deployment
-          cd kubernetes/user-ui
-
-          # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
-
-          # Apply the Kubernetes manifest to EKS
           kubectl create namespace user || true
           kubectl apply -f dynamic.yaml
