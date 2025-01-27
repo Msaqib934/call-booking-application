@@ -17,7 +17,7 @@ spec:
         module: admin
     spec:
       nodeSelector:
-        mdoule: admin
+        module: admin
       containers:
       - image: {{ECR_REGISTRY}}/admin-api:{{IMAGE_TAG}}
         name: admin-api
