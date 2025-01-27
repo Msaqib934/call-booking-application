@@ -17,7 +17,7 @@ spec:
         module: user
     spec:
       containers:
-      - image: 824813378441.dkr.ecr.us-east-1.amazonaws.com/user-ui:21
+      - image: {{ECR_REGISTRY}}/user-ui:{{IMAGE_TAG}}
         name: user-ui
         securityContext:
           runAsNonRoot: true
