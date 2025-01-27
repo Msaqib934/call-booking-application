@@ -51,6 +51,14 @@ jobs:
         run: |
           aws eks --region us-east-1 update-kubeconfig --name check
 
+      - name: Deploy MongoDB
+        run: |
+          cd kubernetes/mongo
+          kubectl create namespace database || true
+          kubectl apply -f secret.yaml
+          kubectl apply -f statefulset.yaml
+          kubectl apply -f service.yaml
+          
       - name: Deploy to admin-ui, admin-api, user-ui, user-api
         run: |
           # Access the specific folder for the admin-api deployment
