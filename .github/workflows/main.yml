@@ -83,28 +83,8 @@ jobs:
           sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
 
           # Apply the Kubernetes manifest to EKS
-          kubectl apply -f deploy.yaml
-          kubectl apply -f configmap.yaml
-          kubectl apply -f service.yaml
-
-      - name: Deploy user-ui
-        env:
-          IMAGE_TAG: ${{ github.run_number }}
-          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
-        run: |
-          # Access the specific folder for the admin-api deployment
-          cd kubernetes/user-ui
-
-          # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
-
-          # Apply the Kubernetes manifest to EKS
-          kubectl create namespace user || true
-          kubectl apply -f deploy.yaml
-          kubectl apply -f configmap.yaml
-          kubectl apply -f service.yaml
-
+          kubectl apply -f dynamic.yaml
+          
       - name: Deploy user-api
         env:
           IMAGE_TAG: ${{ github.run_number }}
@@ -121,3 +101,19 @@ jobs:
           kubectl apply -f deploy.yaml
           kubectl apply -f secret.yaml
           kubectl apply -f service.yaml
+          
+      - name: Deploy user-ui
+        env:
+          IMAGE_TAG: ${{ github.run_number }}
+          ECR_REGISTRY: 824813378441.dkr.ecr.us-east-1.amazonaws.com
+        run: |
+          # Access the specific folder for the admin-api deployment
+          cd kubernetes/user-ui
+
+          # Replace image tag and ECR registry in the deploy.yaml
+          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" deploy.yaml
+          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" deploy.yaml
+
+          # Apply the Kubernetes manifest to EKS
+          kubectl create namespace user || true
+          kubectl apply -f dynamic.yaml
