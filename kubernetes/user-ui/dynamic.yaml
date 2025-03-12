@@ -16,6 +16,8 @@ spec:
         app: user-ui
         module: user
     spec:
+      nodeSelector:
+        module: user
       containers:
       - image: {{ECR_REGISTRY}}/user-ui:{{IMAGE_TAG}}
         name: user-ui
