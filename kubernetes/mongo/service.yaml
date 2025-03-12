@@ -26,3 +26,11 @@ spec:
             objectAlias: "dbuser"
           - path: "dbpass"
             objectAlias: "dbpass"
+  secretObjects:                          # Add this
+    - secretName: mongo-db-secrets-csi    # Name of the Kubernetes Secret
+      type: Opaque
+      data:
+        - objectName: "dbuser"            # Matches jmesPath objectAlias
+          key: dbuser                     # Key in the Kubernetes Secret
+        - objectName: "dbpass"            # Matches jmesPath objectAlias
+          key: dbpass                     # Key in the Kubernetes Secret
