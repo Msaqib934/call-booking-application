@@ -16,6 +16,8 @@ spec:
         app: admin-ui
         module: admin
     spec:
+      nodeSelector:
+        module: admin
       containers:
       - image: {{ECR_REGISTRY}}/admin-ui:{{IMAGE_TAG}}
         name: admin-ui
