@@ -19,7 +19,7 @@ spec:
   provider: aws
   parameters:
     objects: |
-      - objectName: "mongo-db-secret"    # AWS Secrets Manager secret name
+      - objectName: "mongo-db-secrets"    # AWS Secrets Manager secret name
         objectType: "secretsmanager"
         jmesPath:
           - path: "dbuser"
