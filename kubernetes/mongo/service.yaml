@@ -14,7 +14,7 @@ apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
   name: mongo-db-secrets
-  namespace: default
+  namespace: database
 spec:
   provider: aws
   parameters:
