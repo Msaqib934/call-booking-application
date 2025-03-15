@@ -23,17 +23,12 @@ spec:
         ports:
         - containerPort: 27017
           name: dbport
-        env:
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongo-db-secrets
-                key: dbuser
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongo-db-secrets
-                key: dbpass
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          export MONGO_INITDB_ROOT_USERNAME=$(cat /mnt/secrets-store/dbuser)
+          export MONGO_INITDB_ROOT_PASSWORD=$(cat /mnt/secrets-store/dbpass)
+          exec mongod --bind_ip_all
         resources:
           requests:
             memory: "2Gi"
@@ -48,11 +43,8 @@ spec:
           timeoutSeconds: 10
           periodSeconds: 5
         livenessProbe:
-          exec:
-            command:
-              - mongo
-              - --eval
-              - db.adminCommand('ping')
+          tcpSocket:
+            port: 27017
           initialDelaySeconds: 60
           timeoutSeconds: 10
           periodSeconds: 5
@@ -67,3 +59,40 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "mongo-db-secrets"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db-svc
+  namespace: database
+spec:
+  selector:
+    app: mongo-db
+  ports:
+  - port: 27017
+    targetPort: dbport
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: mongo-db-secrets
+  namespace: database
+spec:
+  provider: aws
+  parameters:
+    objects: |
+      - objectName: "mongo-db-secrets"  # AWS secret name
+        objectType: "secretsmanager"
+        jmesPath:
+          - path: "dbuser"              # Extract "dbuser" from the secret
+            objectAlias: "dbuser"       # Alias for the extracted value
+          - path: "dbpass"              # Extract "dbpass" from the secret
+            objectAlias: "dbpass"       # Alias for the extracted value
+  secretObjects:
+    - secretName: "mongo-db-secrets-csi"  # Kubernetes secret name
+      type: Opaque
+      data:
+        - objectName: "dbuser"            # Maps to objectAlias in parameters
+          key: "dbuser"                   # Key in the Kubernetes secret
+        - objectName: "dbpass"            # Maps to objectAlias in parameters
+          key: "dbpass"                   # Key in the Kubernetes secret
