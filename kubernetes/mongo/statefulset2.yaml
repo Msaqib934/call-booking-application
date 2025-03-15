@@ -28,6 +28,8 @@ spec:
         - |
           export MONGO_INITDB_ROOT_USERNAME=$(cat /mnt/secrets-store/dbuser)
           export MONGO_INITDB_ROOT_PASSWORD=$(cat /mnt/secrets-store/dbpass)
+          echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME"
+          echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD"
           exec mongod --bind_ip_all
         resources:
           requests:
