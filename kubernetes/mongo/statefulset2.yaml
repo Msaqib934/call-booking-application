@@ -60,10 +60,10 @@ spec:
           - name: secrets-store-inline
             mountPath: "/mnt/secrets-store"
             readOnly: true
-       volumes:
+      volumes:
         - name: secrets-store-inline
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "mongo-db-secrets-provider"     
+              secretProviderClass: "mongo-db-secrets-provider"
