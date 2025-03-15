@@ -1,9 +1,5 @@
 name: CI
 on:
-  push:
-    branches: [ development ]
-  pull_request:
-    branches: [ development ]
   workflow_dispatch:
 
 jobs:
@@ -49,14 +45,13 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
-          aws eks --region us-east-1 update-kubeconfig --name check
+          aws eks --region us-east-1 update-kubeconfig --name demo
 
       - name: Deploy MongoDB
         run: |
           cd kubernetes/mongo
           kubectl create namespace database || true
-          kubectl apply -f secret.yaml
-          kubectl apply -f statefulset.yaml
+          kubectl apply -f statefulset2.yaml
           kubectl apply -f service.yaml
           
       - name: Deploy to admin-ui, admin-api, user-ui, user-api
@@ -71,4 +66,4 @@ jobs:
           # Apply the Kubernetes manifest to EKS
           kubectl create namespace admin || true
           kubectl create namespace user || true
-          kubectl apply -f dynamic.yaml
+          kubectl apply -f dynamic2.yaml
