@@ -60,8 +60,8 @@ jobs:
           cd kubernetes/${{ matrix.app }}
 
           # Replace image tag and ECR registry in the deploy.yaml
-          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" dynamic.yaml
-          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" dynamic.yaml
+          sed -i "s|{{IMAGE_TAG}}|$IMAGE_TAG|g" dynamic2.yaml
+          sed -i "s|{{ECR_REGISTRY}}|$ECR_REGISTRY|g" dynamic2.yaml
 
           # Apply the Kubernetes manifest to EKS
           kubectl create namespace admin || true
