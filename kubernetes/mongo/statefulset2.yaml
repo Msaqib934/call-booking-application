@@ -66,4 +66,4 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "mongo-db-secrets-provider"
+              secretProviderClass: "mongo-db-secrets"
