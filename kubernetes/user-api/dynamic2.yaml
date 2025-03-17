@@ -16,6 +16,7 @@ spec:
         app: user-api
         module: user
     spec:
+      serviceAccountName: user-service-account
       nodeSelector:
         module: user
       containers:
