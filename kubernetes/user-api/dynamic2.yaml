@@ -75,7 +75,7 @@ spec:
   provider: aws
   parameters:
     objects: |
-      - objectName: "user-api-secret"  # AWS Secrets Manager secret name
+      - objectName: "user-api-secrets"  # AWS Secrets Manager secret name
         objectType: "secretsmanager"
         jmesPath:
           - path: "connectionstring"
