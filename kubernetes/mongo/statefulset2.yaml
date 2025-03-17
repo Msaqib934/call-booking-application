@@ -23,14 +23,17 @@ spec:
         ports:
         - containerPort: 27017
           name: dbport
-        command: ["/bin/sh", "-c"]
-        args:
-        - |
-          export MONGO_INITDB_ROOT_USERNAME=$(cat /mnt/secrets-store/dbuser)
-          export MONGO_INITDB_ROOT_PASSWORD=$(cat /mnt/secrets-store/dbpass)
-          echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME"
-          echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD"
-          exec mongod --bind_ip_all
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-db-secrets-csi
+                key: dbuser
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-db-secrets-csi
+                key: dbpass
         resources:
           requests:
             memory: "2Gi"
