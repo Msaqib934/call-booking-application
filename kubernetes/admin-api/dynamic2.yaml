@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: admin-api
   labels:
-    name:  admin-api
+    name: admin-api
   namespace: admin
 spec:
   selector:
@@ -29,14 +29,13 @@ spec:
         ports:
         - containerPort: 1025
           name: http
-        env:
-          - name: MONGO_URL
-            valueFrom:
-              secretKeyRef:
-                name: admin-api-secrets-csi
-                key: connectionstring
-          - name: PORT 
-            value: "1025"
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          export MONGO_URL=$(cat /mnt/secrets-store/connectionstring)
+          export PORT="1025"
+          echo "MONGO_URL=$MONGO_URL"
+          echo "PORT=$PORT"
         resources:
           requests:
             cpu: "250m"
