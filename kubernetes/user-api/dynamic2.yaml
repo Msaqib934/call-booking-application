@@ -20,7 +20,7 @@ spec:
       nodeSelector:
         module: user
       containers:
-      - image: 824813378441.dkr.ecr.us-east-1.amazonaws.com/user-api:55
+      - image: {{ECR_REGISTRY}}/user-api:{{IMAGE_TAG}}
         name: user-api
         securityContext:
           runAsNonRoot: true
